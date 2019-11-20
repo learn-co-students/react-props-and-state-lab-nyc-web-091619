@@ -4,15 +4,71 @@ import Filters from './Filters'
 import PetBrowser from './PetBrowser'
 
 class App extends React.Component {
-  constructor() {
-    super()
 
-    this.state = {
+    state = {
       pets: [],
       filters: {
         type: 'all'
       }
     }
+
+
+
+  onChangeType = (passedType) => {
+    this.setState({
+      pets:[],
+      filters:{
+        type: passedType
+       }
+    })
+  }
+
+
+  
+
+  onFindPetsClick = () => {
+    switch (this.state.filters.type) {
+      case "all":
+        fetch("/api/pets")
+        .then((resp)=> resp.json() )
+        .then(resp => 
+          resp.forEach((pet)=> {
+            this.setState({
+              pets: [...this.state.pets, pet],
+              filters:{
+                ...this.state.filters
+               }
+            })
+          })
+          ) 
+        break;
+
+      default:
+          fetch(`/api/pets?type=${this.state.filters.type}`)
+          .then((resp)=> resp.json() )
+          .then(resp => 
+            resp.forEach((pet)=> {
+              this.setState({
+                pets: [...this.state.pets, pet],
+                filters:{
+                  ...this.state.filters
+                 }
+              })
+            })
+            )
+        break;
+    }
+  }
+
+  onAdoptPet= (id) => {
+    this.state.pets.forEach((pet)=> {
+      if (pet.id === id){
+        pet.isAdopted = true 
+        this.setState({
+          ...this.state
+        })
+      }
+    })
   }
 
   render() {
@@ -24,10 +80,10 @@ class App extends React.Component {
         <div className="ui container">
           <div className="ui grid">
             <div className="four wide column">
-              <Filters />
+              <Filters onChangeType={this.onChangeType} onFindPetsClick={this.onFindPetsClick}  />
             </div>
             <div className="twelve wide column">
-              <PetBrowser />
+              <PetBrowser onAdoptPet={this.onAdoptPet} pets={this.state.pets}  />
             </div>
           </div>
         </div>
