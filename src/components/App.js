@@ -42,6 +42,7 @@ class App extends React.Component {
       return pet.id === petID
     })
     pet.isAdopted = true
+    this.setState({...this.state.pets, isAdopted: true})
     console.log(pet)
   }
 
