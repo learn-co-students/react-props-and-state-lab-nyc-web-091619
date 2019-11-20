@@ -45,8 +45,7 @@ class App extends React.Component {
     thesePets[index].isAdopted = true
     this.setState({
       pets: [...thesePets]
-    })
-    console.log("Now state = ", this.state)
+    })  
     
   }
   
