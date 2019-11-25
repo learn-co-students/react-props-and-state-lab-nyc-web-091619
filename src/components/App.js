@@ -36,15 +36,22 @@ class App extends React.Component {
     }
     
 
-    onChangeType = ({ target: { value } }) => {
-      this.setState({ filters: { ...this.state.filters, type: value } });
-    };
+    onAdoptPet = (id) => {
+      let thesePets = [...this.state.pets]
+      let index = thesePets.findIndex(pet => pet.id === id)
+      thesePets[index].isAdopted = true
+      this.setState({
+        pets: [...thesePets]
+      })  
+      
+    }
     
    //  onChangeType = (e)=> {
   //   console.log(this.state)
    //  this.setState({type: e.target.value })
    //  e.persist();  
   //}
+  
   render() {
     return (
       <div className="ui container">
@@ -59,8 +66,7 @@ class App extends React.Component {
               />
             </div>
             <div className="twelve wide column">
-              <PetBrowser 
-              pets = {this.state.pets} />
+            <PetBrowser onAdoptPet={this.onAdoptPet} pets={this.state.pets}/>
             </div>
           </div>
         </div>
